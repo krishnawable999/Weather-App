@@ -54,24 +54,19 @@ function getfromsessionStorage(){
      
 }
 
-async function fetchUserweatherinfo(coordinates){
-    const{lat,lon} = coordinates;
-    // make grant container invisible
+async function fetchUserweatherinfo(coordinates) {
+    const { lat, lon } = coordinates;
     grantAccesscontainer.classList.remove("active");
     loadingScreen.classList.add("active");
 
-    // api call
-    try{
-        const responce = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}&units=metric`
-        );
-    const data = await responce.json();
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API}&units=metric`);
+        const data = await response.json();
 
-    loadingScreen.classList.remove("active");
-    userinfo.classList.add("active");
-    renderWeatherInfo(data);
-    }
-    catch(err){
+        loadingScreen.classList.remove("active");
+        userinfo.classList.add("active");
+        renderWeatherInfo(data);
+    } catch (err) {
         loadingScreen.classList.remove("active");
     }
 }
@@ -96,6 +91,7 @@ function renderWeatherInfo(weatherInfo){
     windspeed.innerText = `${weatherInfo?.wind?.speed} m/s`;
     humidity.innerText = `${weatherInfo?.main?.humidity}%`;
     cloudiness.innerText = `${weatherInfo?.clouds?.all}%`;
+    //console.log(cityname);
 }
 
 function getlocation(){
@@ -123,29 +119,29 @@ const searchInput = document.querySelector("[data-searchInput]");
 
 searchForm.addEventListener("submit",(e) => {
     e.preventDefault();
+   
     let cityname = searchInput.value;
 
     if(cityname === ""){
         return;
     }
     else{
+        
         fetchSearchWeatherinfo(cityname);
     }
 });
 
-async function fetchSearchWeatherinfo(city){
+async function fetchSearchWeatherinfo(city) {
     loadingScreen.classList.add("active");
-    userContainer.classList.remove("active");
-    grantAccesscontainer.classList.remove("active");
 
-    try{
-        const responce = await fetch( `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}&units=metric`);
-        const data = await responce.json();
+    try {
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API}&units=metric`);
+        const data = await response.json();
+
         loadingScreen.classList.remove("active");
-        userContainer.classList.add("active");
+        userinfo.classList.add("active");
         renderWeatherInfo(data);
-    }
-    catch(err){
-        
+    } catch (err) {
+
     }
 }
